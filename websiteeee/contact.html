@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kontak</title>
+    <link rel="stylesheet" href="style.css">
+    <script>
+        function validateForm(event) {
+            event.preventDefault();
+            const email = document.getElementById("email").value;
+            const nama = document.getElementById("nama").value;
+            const pesan = document.getElementById("pesan").value;
+            const feedback = document.getElementById("feedback");
+            
+            if (!nama || !email || !pesan) {
+                feedback.textContent = "Harap isi semua bidang!";
+                feedback.style.color = "red";
+                return;
+            }
+            
+            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailPattern.test(email)) {
+                feedback.textContent = "Format email tidak valid!";
+                feedback.style.color = "red";
+                return;
+            }
+            
+            feedback.textContent = "Pesan berhasil dikirim!";
+            feedback.style.color = "green";
+
+            // Kosongkan input setelah pesan terkirim
+            document.getElementById("contact-form").reset();
+        }
+
+        function loadOrderDetails() {
+            const orderDetails = JSON.parse(localStorage.getItem("orderDetails"));
+            if (orderDetails) {
+                document.getElementById("order-summary").innerHTML = `
+                    <h3>Detail Pesanan:</h3>
+                    <p>Nama: ${orderDetails.buyerName}</p>
+                    <p>Alamat: ${orderDetails.buyerAddress}</p>
+                    <p>Metode Pembayaran: ${orderDetails.paymentMethod}</p>
+                    <p>Total Harga: Rp${orderDetails.totalHarga.toLocaleString()}</p>
+                `;
+            }
+        }
+
+        window.onload = loadOrderDetails;
+    </script>
+</head>
+<body>
+    <header>
+        <h1>Toko Online</h1>
+        <nav>
+            <a href="web2.html">Beranda</a>
+            <a href="product.html">Produk</a>
+            <a href="checkout.html">Checkout</a>
+        </nav>
+    </header>
+
+    <main>
+        <h2>Hubungi Kami</h2>
+
+        <section id="order-summary"></section> <!-- Ringkasan pesanan akan dimuat di sini -->
+
+        <form id="contact-form" onsubmit="validateForm(event)">
+            <label for="nama">Nama:</label>
+            <input type="text" id="nama" placeholder="Masukkan nama Anda" required>
+            
+            <label for="email">Email:</label>
+            <input type="email" id="email" placeholder="Masukkan email Anda" required>
+            
+            <label for="pesan">Pesan:</label>
+            <textarea id="pesan" placeholder="Tulis pesan Anda di sini..." required></textarea>
+            
+            <button type="submit">Kirim</button>
+        </form>
+        
+        <p id="feedback"></p>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Toko Online. KELOMPOK RICHARD ANRA KHOMSAH.</p>
+    </footer>
+</body>
+</html>

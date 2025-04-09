@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - Toko Online</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>Toko Online</h1>
+        <nav>
+            <a href="web2.html">Beranda</a>
+            <a href="product.html">Produk</a>
+            <a href="contact.html">Kontak</a>
+        </nav>
+    </header>
+    
+    <main class="checkout-container">
+        <section class="buyer-info">
+            <h2>Informasi Pembeli</h2>
+            <form id="buyer-form">
+                <label>Nama Lengkap:</label>
+                <input type="text" id="buyer-name" required>
+                
+                <label>Alamat:</label>
+                <textarea id="buyer-address" required></textarea>
+                
+                <label>Metode Pembayaran:</label>
+                <select id="payment-method">
+                    <option>Transfer Bank</option>
+                    <option>COD</option>
+                    <option>E-Wallet</option>
+                </select>
+            </form>
+        </section>
+
+        <section class="product-selection">
+            <h2>Pilih Produk</h2>
+            <div id="product-options"></div>
+            <button onclick="updateCheckout()">Checkout</button>
+        </section>
+
+        <section class="order-summary">
+            <h2>Ringkasan Pesanan</h2>
+            <div id="product-list"></div>
+            <hr>
+            <p id="total-harga"><strong>Total Harga: Rp0</strong></p>
+            <button type="button" onclick="placeOrder()">Pesan Sekarang</button>
+        </section>
+    </main>
+    
+    <footer>
+        <p>&copy; 2025 Toko Online.KELOMPOK RICHARD ANRA KHOMSAH.</p>
+    </footer>
+
+    <script>
+        const produk = {
+            "Jus": [
+                { nama: "Jus Alpukat", harga: 15000, gambar: "jus_alpukat.jpeg" },
+                { nama: "Jus Jeruk", harga: 12000, gambar: "jus_jeruk.jpg" },
+                { nama: "Jus Mangga", harga: 13000, gambar: "jus_mangga.jpeg" },
+                { nama: "Jus Jambu Biji", harga: 14000, gambar: "jus_jambu.jpg" },
+                { nama: "Jus Nanas", harga: 10000, gambar: "jus_nanas.webp" },
+                { nama: "Jus Strawberry", harga: 11000, gambar: "jus_stawberry.jpg" },
+            ],
+
+            "Kopi": [
+                { nama: "Kopi Hitam", harga: 8000, gambar: "kopii.webp" },
+                { nama: "Kopi Susu", harga: 10000, gambar: "kopi_susu.jpg" },
+                { nama: "Kopi Latte", harga: 10000, gambar: "kopi_latte.jpg" },
+            ],
+            "Minuman Berenergi": [
+                { nama: "Kratindeng", harga: 15000, gambar: "kratingdeng.jpg" },
+                { nama: "M 150", harga: 16000, gambar: "m_150.webp" },
+            ],
+            "Boba": [
+                { nama: "Boba Coklat", harga: 14000, gambar: "boba_coklat.png" },
+                { nama: "Boba Taro", harga: 10000, gambar: "boba_taro.jpeg" },
+                { nama: "Boba Vanila", harga: 11000, gambar: "boba_vanilla.webp" },
+            ]
+        };
+
+        const productOptions = document.getElementById("product-options");
+        const productList = document.getElementById("product-list");
+        let totalHarga = 0;
+
+        for (const kategori in produk) {
+            const categoryTitle = document.createElement("h3");
+            categoryTitle.textContent = kategori;
+            productOptions.appendChild(categoryTitle);
+
+            produk[kategori].forEach((item, index) => {
+                const optionDiv = document.createElement("div");
+                optionDiv.innerHTML = `
+                    <input type="checkbox" id="product${kategori}${index}" value="${index}" onchange="toggleQuantity('${kategori}', ${index})">
+                    <label for="product${kategori}${index}">${item.nama} - Rp${item.harga.toLocaleString()}</label>
+                    <input type="number" id="quantity${kategori}${index}" value="1" min="1" style="display:none;" onchange="updateCheckout()">
+                `;
+                productOptions.appendChild(optionDiv);
+            });
+        }
+
+        function toggleQuantity(kategori, index) {
+            const checkbox = document.getElementById(`product${kategori}${index}`);
+            const quantityInput = document.getElementById(`quantity${kategori}${index}`);
+            quantityInput.style.display = checkbox.checked ? "inline-block" : "none";
+        }
+
+        function updateCheckout() {
+            productList.innerHTML = "";
+            totalHarga = 0;
+            for (const kategori in produk) {
+                produk[kategori].forEach((item, index) => {
+                    const checkbox = document.getElementById(`product${kategori}${index}`);
+                    const quantityInput = document.getElementById(`quantity${kategori}${index}`);
+                    if (checkbox.checked) {
+                        const quantity = parseInt(quantityInput.value) || 1;
+                        const productDiv = document.createElement("div");
+                        productDiv.classList.add("product-item");
+                        productDiv.innerHTML = `
+                            <h3>${item.nama}</h3>
+                            <img src="${item.gambar}" alt="${item.nama}" class="product-img">
+                            <p>Nama: ${item.nama}</p>
+                            <p>Harga: Rp${item.harga.toLocaleString()}</p>
+                            <p>Jumlah: ${quantity}</p>
+                        `;
+                        productList.appendChild(productDiv);
+                        totalHarga += item.harga * quantity;
+                    }
+                });
+            }
+            document.getElementById("total-harga").innerHTML = `<strong>Total Harga: Rp${totalHarga.toLocaleString()}</strong>`;
+        }
+
+        function placeOrder() {
+            const buyerName = document.getElementById("buyer-name").value;
+            const buyerAddress = document.getElementById("buyer-address").value;
+            const paymentMethod = document.getElementById("payment-method").value;
+            const orderDetails = { buyerName, buyerAddress, paymentMethod, totalHarga };
+            localStorage.setItem("orderDetails", JSON.stringify(orderDetails));
+            window.location.href = "contact.html";
+        }
+    </script>
+</body>
+</html>

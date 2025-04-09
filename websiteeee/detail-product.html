@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detail Produk</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <h1 class="logo">Toko Online</h1>
+            <nav>
+                <a href="web2.html">Beranda</a>
+                <a href="product.html">Produk</a>
+                <a href="contact.html">Kontak</a>
+                <a href="checkout.html">Checkout</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Detail Produk -->
+    <main>
+        <div class="container">
+            <div class="product-detail-container">
+                <div class="image-section">
+                    <img id="product-image" src="images/default.jpg" alt="Produk">
+                </div>
+                <div class="info-section">
+                    <h2 id="product-name">Nama Produk</h2>
+                    <p id="product-price" class="price"></p>
+                    <p id="product-description"></p>
+                    <a id="buy-now" href="#" class="btn-buy">Beli Sekarang</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2025 Toko Online.KELOMPOK RICHARD ANRA KHOMSAH.</p>
+    </footer>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const urlParams = new URLSearchParams(window.location.search);
+            const productId = urlParams.get('id');
+
+            // Pastikan semua gambar menggunakan format .jpg
+            const products = {
+ 1: { name: "ANEKA JUS BUAH", price: "Rp15.000", image: "HH.jpg", description: "Jus buah adalah minuman alami yang dibuat dari ekstrak buah segar, kaya akan vitamin, mineral, dan antioksidan. Minuman ini membantu menjaga kesehatan tubuh, meningkatkan daya tahan, serta memberikan hidrasi dan energi alami. Beberapa jus buah populer seperti jus jeruk, apel, dan mangga tidak hanya lezat tetapi juga bermanfaat bagi kesehatan jantung, pencernaan, dan kulit. Dengan rasa yang menyegarkan dan manfaat yang melimpah, jus buah menjadi pilihan sehat untuk menemani aktivitas sehari-hari. 🍹✨" },
+ 2: { name: "MACAM-MACAM KOPI", price: "Rp10.000", image: "KOPI.jpeg", description: "Kopi: Minuman Berkafein yang Kaya AromaKopi adalah minuman yang dibuat dari biji kopi yang diseduh, dikenal dengan cita rasanya yang khas dan aroma yang kuat. Kandungan kafeinnya membantu meningkatkan energi, konsentrasi, dan mood. Tersedia dalam berbagai varian seperti espresso, latte, dan cappuccino, kopi menjadi favorit banyak orang di seluruh dunia. Selain kenikmatan rasanya, kopi juga memiliki manfaat kesehatan seperti meningkatkan metabolisme dan mengandung antioksidan. ☕✨" },
+ 3: { name: "MINUMAN BERENERGI", price: "Rp20.000", image: "minuman-energi.jpg", description: "Minuman Berenergi: Penyemangat dengan Kafein dan NutrisiMinuman berenergi adalah minuman yang dirancang untuk meningkatkan stamina, fokus, dan kewaspadaan. Biasanya mengandung kafein, gula, serta vitamin seperti B6 dan B12. Minuman ini populer di kalangan pekerja dan atlet untuk mengatasi kelelahan serta meningkatkan performa fisik dan mental. Namun, konsumsinya perlu diperhatikan agar tetap seimbang dan tidak berlebihan. ⚡🥤" },
+ 4: { name: "MACAM MACAM BOBA", price: "Rp15.000", image: "BOBA.jpg", description: "Minuman Boba: Perpaduan Teh, Susu, dan Kenyalnya Mutiara TapiokaMinuman boba, atau bubble tea, adalah minuman manis yang berasal dari Taiwan, terdiri dari teh, susu, gula, dan bola-bola tapioka kenyal. Dengan berbagai varian rasa seperti taro, matcha, dan cokelat, minuman ini populer di kalangan pecinta minuman segar. Sensasi unik saat mengunyah boba membuatnya semakin digemari di seluruh dunia. 🧋✨" }
+            };
+
+            if (products[productId]) {
+                document.getElementById("product-name").innerText = products[productId].name;
+                document.getElementById("product-price").innerText = products[productId].price;
+                document.getElementById("product-image").src = products[productId].image;
+                document.getElementById("product-description").innerText = products[productId].description;
+                document.getElementById("buy-now").href = `checkout.html?id=${productId}`;
+            } else {
+                document.querySelector(".product-detail-container").innerHTML = "<h2>Produk tidak ditemukan</h2>";
+            }
+        });
+    </script>
+</body>
+</html>
